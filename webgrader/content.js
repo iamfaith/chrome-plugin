@@ -12,6 +12,14 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
     input.value = '1'
     // input.dispatchEvent(new KeyboardEvent("keydown", {key: "Enter"}));
     document.querySelector('input[type=\"submit\"]').click();
+  } else if (message.action === "input-sum") {
+    var feedback = document.getElementsByName('feedback')[0]
+
+    var input = document.getElementsByName('score')[0]    
+    lists = document.getElementById('hint_id_score').innerHTML.split(' ')
+    totalScore = lists[2]
+    input.value = eval(totalScore + feedback.value) // feedback is negetive!
+    document.querySelector('input[type=\"submit\"]').click();
   }
 });
 

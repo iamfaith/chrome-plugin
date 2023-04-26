@@ -8,23 +8,29 @@
   },
   "content_scripts": [
     {
-      "matches": ["<all_urls>"], // replace with the url pattern of the web page
+      "matches": ["<all_urls>"],
       "js": ["content.js"]
     }
   ],
   "commands": {
     "input-zero": {
       "suggested_key": {
-        "default": "Alt+0" // replace with the key combination for inputting zero
+        "default": "Alt+0" 
       },
       "description": "Input zero and press enter"
     },
     "input-one": {
       "suggested_key": {
-        "default": "Alt+1" // replace with the key combination for inputting one
+        "default": "Alt+1" 
       },
       "description": "Input one and press enter"
+    },
+    "input-sum": {
+      "suggested_key": {
+        "default": "Alt+2" 
+      },
+      "description": "sum and press enter"
     }
   },
-  "permissions": ["tabs", "<all_urls>"] // replace with the url pattern of the web page
+  "permissions": ["tabs", "<all_urls>"] 
 }
