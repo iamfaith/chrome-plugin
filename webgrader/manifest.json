@@ -1,0 +1,30 @@
+{
+  "manifest_version": 2,
+  "name": "Input Helper",
+  "version": "1.0",
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"], // replace with the url pattern of the web page
+      "js": ["content.js"]
+    }
+  ],
+  "commands": {
+    "input-zero": {
+      "suggested_key": {
+        "default": "Alt+0" // replace with the key combination for inputting zero
+      },
+      "description": "Input zero and press enter"
+    },
+    "input-one": {
+      "suggested_key": {
+        "default": "Alt+1" // replace with the key combination for inputting one
+      },
+      "description": "Input one and press enter"
+    }
+  },
+  "permissions": ["tabs", "<all_urls>"] // replace with the url pattern of the web page
+}
