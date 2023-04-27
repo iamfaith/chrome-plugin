@@ -1,0 +1,16 @@
+{
+  "manifest_version": 2,
+  "name": "Auto Complete",
+  "version": "1.0",
+  "description": "A chrome extension that provides auto complete suggestions for input fields",
+  "permissions": [
+    "activeTab",
+    "storage"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ]
+}
