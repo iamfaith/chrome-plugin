@@ -1,3 +1,5 @@
+import os
+import docx
 import pdfquery
 import pandas as pd
 
@@ -8,14 +10,14 @@ pdf_file = "/home/faith/faith/Downloads/chizong1.pdf"
 # pdf.tree.write('patient1xml.xml', pretty_print = True)
 # print(pdf)
 
-# questions = [] # create an empty list to store the questions 
-# text_elements = pdf.pq('LTTextLineHorizontal') # locate all text elements in the XML file 
+# questions = [] # create an empty list to store the questions
+# text_elements = pdf.pq('LTTextLineHorizontal') # locate all text elements in the XML file
 # text_elements = pdf.pq('LTTextBoxHorizontal')
 # text_elements = pdf.pq('LTTextLineHorizontal')
 
-# for t in text_elements: # loop through each text element 
-#     text = t.text # get the text of the element 
-#     if len(text) > 0 and text[0].isdigit(): # check if the first character is a digit 
+# for t in text_elements: # loop through each text element
+#     text = t.text # get the text of the element
+#     if len(text) > 0 and text[0].isdigit(): # check if the first character is a digit
 #         questions.append(text) # append the text to the questions list print(questions) # print the questions list
 #         print(text)
 #     # break
@@ -59,11 +61,9 @@ pdf_file = "/home/faith/faith/Downloads/chizong1.pdf"
 
 
 # 导入python-docx模块
-import docx
 doc_file = "/home/faith/faith/Downloads/chizong12.docx"
 # 打开一个word文档对象
 doc = docx.Document(doc_file)
-import os
 name = os.path.basename(doc_file).replace("docx", '')
 
 print(len(doc.tables))
@@ -74,19 +74,21 @@ for table in doc.tables:
     # 遍历每一行
     for row in table.rows:
         # 创建一个空列表来存储每一行的文本
-        
+
         # 遍历每个单元格
         for cell in row.cells:
             # 提取单元格的文本内容，并添加到列表中
-            row_text.append(cell.text)
-            next_break = False 
+
+            next_break = False
             break_now = False
+            current_question = []
             for t in cell.tables:
                 for r in t.rows:
                     for c in r.cells:
                         if "ANSWER" in c.text:
                             next_break = True
-                        row_text.append(c.text)
+                        else:
+                            current_question.append(c.text)
                         if "ANSWER" not in c.text and next_break:
                             break_now = True
                             break
@@ -94,21 +96,36 @@ for table in doc.tables:
                         break
                 if break_now:
                     break
+            ans = current_question.pop()
+            if len(current_question) == 0:
+                row_text.append(cell.text.replace('\n', '') + "（ " + "A"+" ）[单选题]\n")
+                row_text.append("A. " + ans.replace('\n', ''))
+            else:
+                row_text.append(cell.text.replace('\n', '') + "（ " + ans.upper()+" ）[单选题]")
+            for idx, item in enumerate(current_question):
+                item = item.replace('\n', '')
+                if len(item) > 1 and item[1] == '.':
+                    item = item.upper()
+                row_text.append(item)
+                if '.' in row_text[-2]:
+                    row_text.append('\n')
+            row_text.append('\n\n')
         # 打印每一行的文本内容，用制表符分隔
 
 with open(f'{name}.txt', 'w') as f:
-    f.write('\n'.join(row_text)) 
-print('\n'.join(row_text))
+    f.write(name + '\n')
+    f.write(''.join(row_text))
+# print(''.join(row_text))
 
-    
+
 # 遍历每个段落
 # for para in doc.paragraphs:
 #     # 提取段落的文本内容
 #     para_text = para.text
 #     print(para_text)
-    # # 按换行符分割文本内容为列表
-    # lines = para_text.split('\n')
-    # # 遍历每一行
-    # for line in lines:
-    #     # 打印每一行的文本内容
-    #     print(line)
+# # 按换行符分割文本内容为列表
+# lines = para_text.split('\n')
+# # 遍历每一行
+# for line in lines:
+#     # 打印每一行的文本内容
+#     print(line)
